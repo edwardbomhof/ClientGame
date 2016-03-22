@@ -12,3 +12,7 @@ canvas{
     height:auto;
     background-color: black;
 }
+
+audio {
+    display: none;
+}

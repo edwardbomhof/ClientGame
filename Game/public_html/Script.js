@@ -157,7 +157,7 @@ function drawGui(){
     ctx.font = height*0.1177 + "px Arial";
     for(var i = 0; i<buttons.length; i++){
         if (i === selected) {
-            ctx.fillRect(width/3.2, height*0.25 + (i*height*0.16), width - (2*(width/3.2)) ,height*0.1449 );
+            ctx.fillRect(width/3.1, height*0.25 + (i*height*0.16), width - (2*(width/3.1)) ,height*0.155 );
             ctx.fillStyle="black";
             ctx.fillText(buttons[i][0], width/2, height*0.3623 + (i*height*0.16));
             ctx.fillStyle="white";
