@@ -14,7 +14,7 @@ $(document).ready(function(){
     declareWidth();
     ctx =c.getContext('2d');
     addListeners();
-    drawGui(guiEnum.Main);
+    declareGui(guiEnum.Main);
     $(window).resize(redraw());
 });
 
@@ -46,21 +46,24 @@ function addListeners(){
                 redraw();
                 break;
             case 13:
-                redraw(buttons[selected][1]);
+                declareGui(buttons[selected][1]);
                 break;
         }
-    }
+    };
 }
 
 // declares which window should be shown
-function declareMenu(guiName){
+function declareGui(guiName){
     switch (guiName){
+        case guiEnum.Splash:
+            break;
         case guiEnum.Main:
             buttons = [];
             selected = 0;
             openedMenu = "Main menu";
             addButton("New game", guiEnum.New);
             addButton("Join game", guiEnum.Join);
+            redraw();
             break;
         case guiEnum.New:
             buttons = [];
@@ -69,6 +72,7 @@ function declareMenu(guiName){
             addButton("Create", guiEnum.Game);
             addButton("Join game", guiEnum.Join);
             addButton("Back to main", guiEnum.Main);
+            redraw();
             break;
         case guiEnum.Join:
             buttons = [];
@@ -77,12 +81,14 @@ function declareMenu(guiName){
             addButton("thisone?", "newgame");
             addButton("Join game", guiEnum.Join);
             addButton("Back to main", guiEnum.Main);
+            redraw();
             break;
         case guiEnum.Game:
             buttons = [];
             selected = 0;
             openedMenu = "Put game here";
             addButton("Back to main", guiEnum.Main);
+            redraw();
             break;
     }
 }
@@ -96,21 +102,20 @@ function declareWidth(){
 }
 
 // redraws canvas
-function redraw(guiName){
+function redraw(){
     ctx.save();
     declareWidth();
     ctx.clearRect(0,0,width,height);
 
     ctx.beginPath();
-    drawGui(guiName);
+    drawGui();
 }
 
 // draws canvas with game
-function drawGui(guiname){
-    declareMenu(guiname);
+function drawGui(){
     ctx.globalAlpha=1;
     ctx.save();
-    ctx.fillStyle="white"
+    ctx.fillStyle="white";
     ctx.font = height*.2+"px Arial";
     ctx.textAlign = "center";
     ctx.fillText(openedMenu,width/2,height*0.18);
