@@ -1,8 +1,8 @@
 var width, height, c, ctx = "";
 var selected = 0;
 var buttons = [];
-var guiEnum ={
-    Splash:0, // splash with this one
+var guiEnum = {
+    Splash: 0, // splash with this one
     Main : 1,
     New : 2,
     Join : 3,
@@ -12,10 +12,9 @@ var guiEnum ={
 $(document).ready(function(){
     c =  document.getElementById("myCanvas");
     declareWidth();
-    ctx =c.getContext('2d');
-    addListeners();
-    declareGui(guiEnum.Main);
-    $(window).resize(redraw());
+    ctx = c.getContext('2d');
+    checkInput();
+    declareGui(guiEnum.Splash);
 });
 
 //add buttons to buttonarray
@@ -29,7 +28,7 @@ function addButton(name, gui){
 // declares listeners for keyboard
 function addListeners(){
     window.onkeyup = function(e){
-        var key= e.keyCode ? e.keyCode : e.which;
+        var key = e.keyCode ? e.keyCode : e.which;
         switch(key){
             case 38:
                 selected = selected-1;
@@ -52,12 +51,27 @@ function addListeners(){
     };
 }
 
+// removes the any key eventlistener and adds the normal menu eventlisteners
+function changeListeners(){
+        declareGui(guiEnum.Main);
+        window.removeEventListener("keyup",changeListeners,false);
+        addListeners();
+}
+
+// press any key to continue event check
+function checkInput(){
+    window.addEventListener("keyup", changeListeners ,false);
+}
+
 // declares which window should be shown
 function declareGui(guiName){
     switch (guiName){
         case guiEnum.Splash:
+            drawSplash();
+            checkInput();
             break;
         case guiEnum.Main:
+            addListeners();
             buttons = [];
             selected = 0;
             openedMenu = "Main menu";
@@ -95,8 +109,8 @@ function declareGui(guiName){
 
 // necessary for resizing
 function declareWidth(){
-    c.width=window.innerWidth;
-    c.height=window.innerHeight;
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
     width = c.width;
     height = c.height;
 }
@@ -111,20 +125,41 @@ function redraw(){
     drawGui();
 }
 
-// draws canvas with game
+// draws the starting screen
+function drawSplash(){
+    ctx.globalAlpha = 1;
+    ctx.save();
+    ctx.fillStyle = "white";
+    ctx.font = height*.2 + "px Helvetica";
+    ctx.textAlign = "center";
+    ctx.fillText("Ping Pong",width/2,height*0.18);
+    
+    pic = new Image();
+    pic.onload = function(){
+        ctx.drawImage(pic,width/3.2,height*0.22,width - (2*(width/3.2)),height*0.515);
+    };
+    pic.src = "splashart.jpg";
+    
+    ctx.fillStyle = "white";
+    ctx.font = height*0.085 + "px Arial";
+    ctx.fillText("Press any key to continue",width/2,height*0.8);
+} 
+
+// draws the menuname with buttons
 function drawGui(){
     ctx.globalAlpha=1;
     ctx.save();
-    ctx.fillStyle="white";
-    ctx.font = height*.2+"px Arial";
+    ctx.fillStyle = "white";
+    ctx.font = height*.2 + "px Arial";
     ctx.textAlign = "center";
     ctx.fillText(openedMenu,width/2,height*0.18);
-    ctx.font = height*0.1177+"px Arial";
+    
+    ctx.font = height*0.1177 + "px Arial";
     for(var i = 0; i<buttons.length; i++){
         if (i === selected) {
-            ctx.fillRect(width/3.2, height*0.25+(i*height*0.16), width-(2*(width/3.2)) ,height*0.1449 );
+            ctx.fillRect(width/3.2, height*0.25 + (i*height*0.16), width - (2*(width/3.2)) ,height*0.1449 );
             ctx.fillStyle="black";
-            ctx.fillText(buttons[i][0], width/2, height*0.3623+(i*height*0.16));
+            ctx.fillText(buttons[i][0], width/2, height*0.3623 + (i*height*0.16));
             ctx.fillStyle="white";
         }
         else{
@@ -134,4 +169,3 @@ function drawGui(){
     ctx.clip();
     ctx.restore();
 }
-
