@@ -38,7 +38,7 @@ function calcDirection(previous_pos, current_pos) {
     previous_position = current_position;
 }
 
-function hitCalcDirection(hit)
+function hitCalcDirection(hit, boardLocation)
 {
         if (hit == "border"){
             if (direction.y >= 0){
@@ -49,6 +49,15 @@ function hitCalcDirection(hit)
             }
         }
         else if (hit == "player"){
+
+            cornerIncoming = toDegrees(Math.atan(direction.x/direction.y));
+            hitLocation = current_position.y - boardLocation.y2;
+            newAngleFactor = 0.0022*(hitLocation*hitLocation)+-.22*hitLocation+6.5;
+            outcomingCorner = cornerIncoming * newAngleFactor;
+            direction.y = direction.x * Math.sin(180-outcomingCorner - 90)/Math.sin(outcomingCorner);
+            if (direction.y >= 5 ){
+                direction.y = 4.9;
+            }
             if (direction.x >=  0){
                 direction.x= direction.x *-1;
             }
@@ -64,16 +73,20 @@ function  resetRound(){
 }
 
 // gameloop
+function toDegrees (angle) {
+    return angle * (180 / Math.PI);
+}
+
 setInterval(function () {
     for (var i = 0; i < data.rooms.length; i++) {
         if (data.rooms[i].players.length == 2) {
             if ((current_position.y >= data.rooms[i].players[1].y && current_position.y <= data.rooms[i].players[1].y+100) || (current_position.y >= data.rooms[i].players[0].y && current_position.y <= data.rooms[i].players[0].y+100)){
                 if ((current_position.x >= data.rooms[i].players[1].x-5 && current_position.x <= data.rooms[i].players[1].x-2) || (current_position.x >= data.rooms[i].players[0].x-5 && current_position.x <= data.rooms[i].players[0].x-2)){
-                    hitCalcDirection("player");
+                    hitCalcDirection("player", {"y1":data.rooms[i].players[0].y, "y2":data.rooms[i].players[1].y});
                 }
             }
-            if ((current_position.y >= -5 && current_position.y <= 5) ||(current_position.y >= 595 && current_position.y <= 605 ) ){
-                hitCalcDirection("border");
+            if ((current_position.y >= 25 && current_position.y <= 35) ||(current_position.y >= 565 && current_position.y <= 575 ) ){
+                hitCalcDirection("border",0);
             }
             if (current_position.x < data.rooms[i].players[0].x-5){
                 data.rooms[i].players[1].points++;
