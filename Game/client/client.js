@@ -2,7 +2,7 @@ var room = null;
 var id = null;
 var data = {};
 
-var socket = io.connect('http://localhost');
+var socket = io.connect('http://localhost:8080');
 
 draw_loading();
 

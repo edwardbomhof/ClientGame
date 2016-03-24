@@ -2,7 +2,7 @@ var app = require('http').createServer(handler)
 var io = require('socket.io')(app);
 var fs = require('fs');
 
-app.listen(80);
+app.listen(8080);
 
 function handler(req, res) {
     fs.readFile(__dirname + '/index.html',
@@ -30,22 +30,80 @@ io.on('connection', function (socket) {
 });
 
 
+var previous_position = {"x":250, "y":50}, current_position= {"x":254, "y":47},direction = {"x" :0,"y":0};
+
+function calcDirection(previous_pos, current_pos) {
+    direction.x = current_pos.x - previous_pos.x;
+    direction.y = current_pos.y - previous_pos.y;
+    previous_position = current_position;
+}
+
+function hitCalcDirection(hit)
+{
+        if (hit == "border"){
+            if (direction.y >= 0){
+                direction.y= direction.y *-1;
+            }
+            else if(direction.y<=-1){
+                direction.y= Math.abs(direction.y);
+            }
+        }
+        else if (hit == "player"){
+            if (direction.x >=  0){
+                direction.x= direction.x *-1;
+            }
+            else if(direction.x<=-1){
+                console.log(current_position);
+                direction.x= Math.abs(direction.x);
+            }
+        }
+
+}
+function  resetRound(){
+    previous_position = {"x":250, "y":50}, current_position= {"x":254, "y":47},direction = {"x" :0,"y":0};
+}
+
 // gameloop
 setInterval(function () {
     for (var i = 0; i < data.rooms.length; i++) {
         if (data.rooms[i].players.length == 2) {
+            if ((current_position.y >= data.rooms[i].players[1].y && current_position.y <= data.rooms[i].players[1].y+100) || (current_position.y >= data.rooms[i].players[0].y && current_position.y <= data.rooms[i].players[0].y+100)){
+                if ((current_position.x >= data.rooms[i].players[1].x-5 && current_position.x <= data.rooms[i].players[1].x-2) || (current_position.x >= data.rooms[i].players[0].x-5 && current_position.x <= data.rooms[i].players[0].x-2)){
+                    hitCalcDirection("player");
+                }
+            }
+            if ((current_position.y >= -5 && current_position.y <= 5) ||(current_position.y >= 595 && current_position.y <= 605 ) ){
+                hitCalcDirection("border");
+            }
+            if (current_position.x < data.rooms[i].players[0].x-5){
+                data.rooms[i].players[1].points++;
+                resetRound();
+                data.rooms[i].players[1].y = 350;
+                data.rooms[i].players[0].y = 450;
+                calcDirection(previous_position, current_position);
+            }
+            else if (current_position.x > data.rooms[i].players[1].x+5){
+                data.rooms[i].players[0].points++;
+                resetRound();
+                data.rooms[i].players[1].y = 350;
+                data.rooms[i].players[0].y = 450;
+                calcDirection(previous_position, current_position);
+            }
+            current_position.x  += direction.x;
+            current_position.y  += direction.y;
+            previous_position = current_position;
 
             // update ball
-
+            data.rooms[i].ball = current_position;
 
             // update scores
-            data.rooms[i].players[0].points = Math.floor((Math.random() * 10) + 1);
-            data.rooms[i].players[1].points = i;
+           //data.rooms[i].players[0].points = Math.floor((Math.random() * 10) + 1);
+           // data.rooms[i].players[1].points = i;
 
             io.sockets.json.emit('sync', {"room": i, "data": data.rooms[i]});
         }
     }
-}, 1000);
+}, 17);
 
 var data = {
     "rooms": []
@@ -55,6 +113,7 @@ var data = {
 function connect(socket) {
     if (data.rooms.length == 0) {
         data.rooms.push({"players": [], "ball": {"x": 100, "y": 100}});
+        calcDirection(previous_position, current_position, false);
     }
 
     for (var i = 0; i < data.rooms.length; i++) {

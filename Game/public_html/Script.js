@@ -109,8 +109,8 @@ function declareGui(guiName){
 
 // necessary for resizing
 function declareWidth(){
-    c.width=window.innerWidth;
-    c.height=window.innerHeight;
+    c.width=1200;
+    c.height=768;
     width = c.width;
     height = c.height;
 }
