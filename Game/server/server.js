@@ -38,6 +38,18 @@ function calcDirection(previous_pos, current_pos) {
     previous_position = current_position;
 }
 
+function calcReflection(boardLocation){
+    cornerIncoming = toDegrees(Math.atan(direction.x/direction.y));
+    hitLocation = current_position.y - boardLocation;
+    newAngleFactor = 0.0014*(hitLocation*hitLocation)+-.14*hitLocation+4.5;
+    outcomingCorner = cornerIncoming * newAngleFactor;
+    direction.y = direction.x * Math.sin(180-outcomingCorner - 90)/Math.sin(outcomingCorner);
+    if (direction.y >= 4 ){
+        direction.y = 4;
+    }
+}
+
+
 function hitCalcDirection(hit, boardLocation)
 {
         if (hit == "border"){
@@ -49,19 +61,12 @@ function hitCalcDirection(hit, boardLocation)
             }
         }
         else if (hit == "player"){
-
-            cornerIncoming = toDegrees(Math.atan(direction.x/direction.y));
-            hitLocation = current_position.y - boardLocation.y2;
-            newAngleFactor = 0.0022*(hitLocation*hitLocation)+-.22*hitLocation+6.5;
-            outcomingCorner = cornerIncoming * newAngleFactor;
-            direction.y = direction.x * Math.sin(180-outcomingCorner - 90)/Math.sin(outcomingCorner);
-            if (direction.y >= 5 ){
-                direction.y = 4.9;
-            }
             if (direction.x >=  0){
+                calcReflection(boardLocation.y2);
                 direction.x= direction.x *-1;
             }
             else if(direction.x<=-1){
+                calcReflection(boardLocation.y1);
                 console.log(current_position);
                 direction.x= Math.abs(direction.x);
             }
