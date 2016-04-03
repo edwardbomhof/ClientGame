@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas</title>
+        <script src="jquery-1.11.3.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script>
+
+        </script>
+        <style>
+            #canvas {
+                background-color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas" width="800" height="600"></canvas>
+        <script>
+            var socket = io('http://localhost');
+
+            socket.on('sync', function (data) {
+                players = data;
+                draw();
+            });
+
+            var ctx = document.getElementById("canvas").getContext('2d');
+
+            var players = [
+                {
+                    "x": 10,
+                    "y": 200
+                },
+                {
+                    "x": 10,
+                    "y": 200
+                }
+            ];
+
+            function moving(evt) {
+                if (evt.keyCode == 38 && players[0].y >= 30) {
+                    players[0].y -= 10;
+                    socket.emit('sync', {"player1": players[0].y});
+                }
+
+                if (evt.keyCode == 40 && players[0].y <= ($('#canvas').height() - 30) - 100) {
+                    players[0].y += 10;
+                    socket.emit('sync', {"player1": players[0].y});
+                }
+
+                draw();
+            }
+
+            $(document).bind('keydown', moving);
+
+            function draw() {
+                ctx.clearRect(0, 0,
+                        document.getElementById("canvas").width,
+                        document.getElementById("canvas").height);
+                // style
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = '#fff';
+                // middle line
+                ctx.beginPath();
+                ctx.setLineDash([15]);
+                ctx.moveTo(400, 5);
+                ctx.lineTo(400, 595);
+                ctx.stroke();
+                // horizontal upper line
+                ctx.beginPath();
+                ctx.setLineDash([0, 0]);
+                ctx.moveTo(5, 10);
+                ctx.lineTo(795, 10);
+                ctx.stroke();
+                // horizontal bottom line
+                ctx.beginPath();
+                ctx.moveTo(5, 590);
+                ctx.lineTo(795, 590);
+                ctx.stroke();
+                // scores
+                ctx.fillStyle = "white";
+                ctx.font = "100px Arial";
+                ctx.fillText("0", 300, 100);
+                ctx.fillText("0", 450, 100);
+                // player 1
+                ctx.beginPath();
+                ctx.moveTo(40, players[0].y);
+                ctx.lineTo(40, players[0].y + 100);
+                ctx.stroke();
+                // player 2
+                ctx.beginPath();
+                ctx.moveTo(760, players[1].y);
+                ctx.lineTo(760, players[1].y + 100);
+                ctx.stroke();
+                // ball
+                ctx.beginPath();
+                ctx.moveTo(100, 110);
+                ctx.lineTo(110, 110);
+                ctx.stroke();
+            }
+
+            draw();
+        </script>
+    </body>
+</html>
