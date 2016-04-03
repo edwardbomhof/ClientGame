@@ -1,5 +1,4 @@
 var socket ="";
-var rooms=[];
 
 var width, height, c, ctx = "";
 var selected = 0;
@@ -162,7 +161,7 @@ function drawSplash(){
     pic.onload = function(){
         ctx.drawImage(pic,width/3.2,height*0.22,width - (2*(width/3.2)),height*0.515);
     };
-    pic.src = "splashart.jpg";
+    pic.src = "images/splashart.jpg";
     ctx.fillStyle = "white";
     ctx.font = height*0.085 + "px Arial";
     ctx.fillText("Press any key to continue",width/2,height*0.8);
