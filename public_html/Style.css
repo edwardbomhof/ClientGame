@@ -16,3 +16,53 @@ canvas{
 audio {
     display: none;
 }
+
+table {
+    border: double;
+    border-collapse: collapse;
+}
+ul {
+    list-style-type: none;
+}
+h2 {
+    font-weight: bold;
+}
+th {
+    border: solid 1px;
+    text-align: left;
+    margin-left: 5%;
+    width: 25%;
+}
+td {
+    border: solid 1px;
+    text-align: center;
+}
+td.browser {
+    border-left: 1px;
+    border-bottom: none;
+    border-top: none;
+}
+td.noalign{
+    text-align: left;
+    padding-left: 2%;
+}
+.finished {
+    background-color: darkgreen;
+    margin: 3px;
+    padding: 4px;
+}
+.partly {
+    background-color: orange;
+    margin: 3px;
+    padding: 4px;
+}
+.notfinished {
+    background-color: red;
+    margin: 3px;
+    padding: 4px;
+}
+.notimplemented {
+    background-color: gray;
+    margin: 3px;
+    padding: 4px;
+}
