@@ -1,29 +1,31 @@
+
 var room = null;
 var id = null;
 var data = {};
-var socket;
+function Client(){
 
-socket = io.connect('http://localhost:8080');
+    var socket = io.connect('http://localhost:8080');
     draw_loading();
 
-function disconnect(){
+this.disconnect = function(){
        socket.disconnect();
         socket.close();
+    draw_loading();
 }
 
-this.socket.on('join_game', function (data) {
+socket.on('join_game', function (data) {
     room = data.room;
     id = data.id;
 });
 
-this.socket.on('sync', function (d) {
+socket.on('sync', function (d) {
     if (room == d.room) {
         data = d.data;
         draw_game();
     }
 });
 
-this.socket.on('disconnect', function (data) {
+socket.on('disconnect', function (data) {
     if (data.room == room) {
         draw_loading();
     }
@@ -33,7 +35,7 @@ $(document).bind('keydown', function (evt) {
 //    if(room != null && id != null) {
 //        // nu pas de data versturen
 //    }
-    
+
     if (evt.keyCode == 38 && data.players[id].y >= 30) {
         data.players[id].y -= 10;
     }
@@ -111,4 +113,5 @@ function draw_game() {
     ctx.moveTo(data.ball.x - 5, data.ball.y);
     ctx.lineTo(data.ball.x + 5, data.ball.y);
     ctx.stroke();
+}
 }

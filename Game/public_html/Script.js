@@ -1,5 +1,3 @@
-var socket ="";
-
 var width, height, c, ctx = "";
 var selected = 0;
 var buttons = [];
@@ -9,6 +7,7 @@ var guiEnum ={
     Game : 2,
     GameOver:5
 };
+var client = "";
 
 $(document).ready(function()
 {
@@ -36,8 +35,8 @@ function addListeners(){
         switch(key){
             case 8:
             case 27:
+                client.disconnect();
                 declareGui(guiEnum.Main);
-                disconnect();
                 break;
             case 38:
                 selected = selected-1;
@@ -54,6 +53,7 @@ function addListeners(){
                 redraw();
                 break;
             case 13:
+                console.log(buttons[selected][1]);
                 declareGui(buttons[selected][1]);
                 break;
         }
@@ -84,7 +84,7 @@ function declareGui(guiName){
         case guiEnum.Game:
             buttons = [];
             openedMenu = "";
-            $.getScript("../client/client.js");
+            this.client = new Client();
             break;
         case guiEnum.GameOver:
              drawGameOver();
