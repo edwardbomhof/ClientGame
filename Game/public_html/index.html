@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery.js"></script>
+    <script src="socket.io.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="jquery-1.11.3.min.js"></script>
     <script src="Script.js"></script>
@@ -9,7 +13,7 @@
 </head>
 <body>
 <section>
-    <canvas id="myCanvas" Style="border:1px solid #000000;">
+    <canvas id="myCanvas" Style="border:1px solid #000000; height: 100%; width: 100%;">
     </canvas>
     <!--<audio controls loop autoplay>
         <source src="PingPong.mp3" type="audio/mp3" />

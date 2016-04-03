@@ -92,12 +92,20 @@ setInterval(function () {
                 if (data.rooms[i].current_position.x >= data.rooms[i].players[0].x-5 && data.rooms[i].current_position.x <= data.rooms[i].players[0].x-2  ){
                     data.rooms[i]=hitCalcDirection("player", data.rooms[i], {"y1":data.rooms[i].players[0].y, "y2":data.rooms[i].players[1].y});
                 }
+                else if (data.rooms[i].current_position.x >= data.rooms[i].players[1].x-5 && data.rooms[i].current_position.x <= data.rooms[i].players[1].x-2  ) {
+                    if ( data.rooms[i].current_position.y >=data.rooms[i].players[1].y  && data.rooms[i].current_position.y <= data.rooms[i].players[1].y+100){
+                        data.rooms[i]=hitCalcDirection("player", data.rooms[i], {"y1":data.rooms[i].players[0].y, "y2":data.rooms[i].players[1].y});
+                    }
+                }
             }
             else if ( data.rooms[i].current_position.y >=data.rooms[i].players[1].y  && data.rooms[i].current_position.y <= data.rooms[i].players[1].y+100){
                 if (data.rooms[i].current_position.x >= data.rooms[i].players[1].x-5 && data.rooms[i].current_position.x <= data.rooms[i].players[1].x-2  ) {
                     data.rooms[i]=hitCalcDirection("player", data.rooms[i], {"y1":data.rooms[i].players[0].y, "y2":data.rooms[i].players[1].y});
-                }
-            }
+                } else if (data.rooms[i].current_position.x >= data.rooms[i].players[0].x-5 && data.rooms[i].current_position.x <= data.rooms[i].players[0].x-2  ){
+                    if ( data.rooms[i].current_position.y >= data.rooms[i].players[0].y && data.rooms[i].current_position.y <= data.rooms[i].players[0].y+100 ){
+                          data.rooms[i]=hitCalcDirection("player", data.rooms[i], {"y1":data.rooms[i].players[0].y, "y2":data.rooms[i].players[1].y});
+                    }
+            }}
             if ((data.rooms[i].current_position.y <= 35) ||(data.rooms[i].current_position.y >= 565) ){
                 data.rooms[i]=hitCalcDirection("border",data.rooms[i]);
             }

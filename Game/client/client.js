@@ -1,24 +1,29 @@
 var room = null;
 var id = null;
 var data = {};
+var socket;
 
-var socket = io.connect('http://localhost:8080');
+socket = io.connect('http://localhost:8080');
+    draw_loading();
 
-draw_loading();
+function disconnect(){
+       socket.disconnect();
+        socket.close();
+}
 
-socket.on('join_game', function (data) {
+this.socket.on('join_game', function (data) {
     room = data.room;
     id = data.id;
 });
 
-socket.on('sync', function (d) {
+this.socket.on('sync', function (d) {
     if (room == d.room) {
         data = d.data;
         draw_game();
     }
 });
 
-socket.on('disconnect', function (data) {
+this.socket.on('disconnect', function (data) {
     if (data.room == room) {
         draw_loading();
     }
@@ -33,7 +38,7 @@ $(document).bind('keydown', function (evt) {
         data.players[id].y -= 10;
     }
 
-    if (evt.keyCode == 40 && data.players[id].y <= ($('#canvas').height() - 30) - 100) {
+    if (evt.keyCode == 40 && data.players[id].y <= ($('#myCanvas').height() - 30) - 100) {
         data.players[id].y += 10;
     }
 
@@ -41,11 +46,11 @@ $(document).bind('keydown', function (evt) {
 });
 
 function draw_loading() {
-    var ctx = document.getElementById('canvas').getContext('2d');
+    var ctx = document.getElementById('myCanvas').getContext('2d');
 
     ctx.clearRect(0, 0,
-            document.getElementById("canvas").width,
-            document.getElementById("canvas").height);
+            document.getElementById("myCanvas").width,
+            document.getElementById("myCanvas").height);
 
     ctx.fillStyle = "white";
     ctx.font = "100px Arial";
@@ -53,11 +58,11 @@ function draw_loading() {
 }
 
 function draw_game() {
-    var ctx = document.getElementById('canvas').getContext('2d');
+    var ctx = document.getElementById('myCanvas').getContext('2d');
 
     ctx.clearRect(0, 0,
-            document.getElementById("canvas").width,
-            document.getElementById("canvas").height);
+            document.getElementById("myCanvas").width,
+            document.getElementById("myCanvas").height);
 
     // style
     ctx.lineWidth = 10;

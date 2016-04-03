@@ -7,18 +7,11 @@ var buttons = [];
 var guiEnum ={
     Splash:0, // splash with this one
     Main : 1,
-    New : 2,
-    Join : 3,
-    Game: 4 // game over here
+    Game : 2,
 };
 
 $(document).ready(function()
 {
-    socket = io.connect("http://localhost:8080");
-
-    socket.on('list_of_rooms', function(obj){
-        rooms = obj;
-    });
     c =  document.getElementById("myCanvas");
     declareWidth();
     ctx =c.getContext('2d');
@@ -43,6 +36,7 @@ function addListeners(){
             case 8:
             case 27:
                 declareGui(guiEnum.Main);
+                disconnect();
                 break;
             case 38:
                 selected = selected-1;
@@ -74,19 +68,15 @@ function declareGui(guiName){
             buttons = [];
             selected = 0;
             openedMenu = "Main menu";
-            addButton("New game", guiEnum.New);
-            addButton("Join game", guiEnum.Join);
+            addButton("Join game", guiEnum.Game);
             redraw();
             break;
-        case guiEnum.New:
+        case guiEnum.Game:
             buttons = [];
-            selected = 0;
-            openedMenu = "New game";
-            addButton("Create", guiEnum.Game);
-            addButton("Join game", guiEnum.Join);
-            addButton("Back to main", guiEnum.Main);
-            redraw();
-            break;
+            openedMenu = "";
+            $.getScript("../client/client.js");
+
+            break;/*
         case guiEnum.Join:
             buttons = [];
             selected = 0;
@@ -103,7 +93,7 @@ function declareGui(guiName){
             openedMenu = "Put game here";
             addButton("Back to main", guiEnum.Main);
             redraw();
-            break;
+            break;*/
     }
 }
 
