@@ -1,0 +1,18 @@
+@font-face {
+    font-family: Fong; /* Font + Pong = Fong */
+    src: url(Legacy.ttf) format('truetype');
+}
+
+canvas{
+    position:absolute;
+    bottom:0;
+    top:0;
+    left:0;
+    width:99%;
+    height:auto;
+    background-color: black;
+}
+
+audio {
+    display: none;
+}
