@@ -15,7 +15,7 @@ $(document).ready(function(){
     declareWidth();
     ctx = c.getContext('2d');
     checkInput();
-    declareGui(guiEnum.GameOver);
+    declareGui(guiEnum.Splash);
 });
 
 //add buttons to buttonarray
